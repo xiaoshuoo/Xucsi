@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Store</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="gradient-bg"></div>
+    
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <img src="logo.png" alt="Logo">
+                GAMESTORE
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    Главная
+                </a>
+                <a href="features.html" class="nav-link">
+                    <i class="fas fa-star"></i>
+                    Функции
+                </a>
+                <a href="pricing.html" class="nav-link">
+                    <i class="fas fa-tags"></i>
+                    Цены
+                </a>
+                <a href="support.html" class="nav-link">
+                    <i class="fas fa-headset"></i>
+                    Поддержка
+                </a>
+                
+                <div class="profile-section" id="profileSection">
+                    <a href="profile.html" class="profile-link">
+                        <div class="profile-avatar">
+                            <img src="avatar.png" alt="Avatar" id="profileAvatar">
+                            <span class="status-dot"></span>
+                        </div>
+                        <div class="profile-info">
+                            <span class="username" id="profileUsername">Username</span>
+                            <span class="subscription" id="profileSubscription">Premium</span>
+                        </div>
+                    </a>
+                </div>
+                
+                <a href="login.html" class="btn login-btn" id="loginBtn">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Войти
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-title">
+                <h1>Game<span>Store</span></h1>
+                <p class="subtitle">Улучши свою игру с нашими инструментами</p>
+            </div>
+            <div class="hero-features">
+                <div class="feature">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Безопасность</span>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-bolt"></i>
+                    <span>Скорость</span>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-code"></i>
+                    <span>Инновации</span>
+                </div>
+            </div>
+            <a href="register.html" class="cta-btn" id="cta-btn">
+                <span>Начать сейчас</span>
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>

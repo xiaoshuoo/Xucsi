@@ -1,43 +1,56 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" class="dark-theme">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Store</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="gradient-bg"></div>
+    <div class="loading" id="loadingScreen">
+        <div class="loading-spinner"></div>
+    </div>
     
     <header class="header">
         <nav class="nav">
             <div class="logo">
-                <img src="logo.png" alt="Logo">
+                <img src="logo.png" alt="Logo" loading="lazy">
                 GAMESTORE
             </div>
-            <div class="nav-links">
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="nav-links" id="navLinks">
                 <a href="index.html" class="nav-link">
                     <i class="fas fa-home"></i>
-                    Главная
+                    <span>Главная</span>
+                </a>
+                <a href="games.html" class="nav-link">
+                    <i class="fas fa-gamepad"></i>
+                    <span>Игры</span>
                 </a>
                 <a href="features.html" class="nav-link">
                     <i class="fas fa-star"></i>
-                    Функции
+                    <span>Функции</span>
                 </a>
                 <a href="pricing.html" class="nav-link">
                     <i class="fas fa-tags"></i>
-                    Цены
+                    <span>Цены</span>
                 </a>
                 <a href="support.html" class="nav-link">
                     <i class="fas fa-headset"></i>
-                    Поддержка
+                    <span>Поддержка</span>
                 </a>
                 
                 <div class="profile-section" id="profileSection">
                     <a href="profile.html" class="profile-link">
                         <div class="profile-avatar">
-                            <img src="avatar.png" alt="Avatar" id="profileAvatar">
+                            <img src="avatar.png" alt="Avatar" id="profileAvatar" loading="lazy">
                             <span class="status-dot"></span>
                         </div>
                         <div class="profile-info">
@@ -47,9 +60,13 @@
                     </a>
                 </div>
                 
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                
                 <a href="login.html" class="btn login-btn" id="loginBtn">
                     <i class="fas fa-sign-in-alt"></i>
-                    Войти
+                    <span>Войти</span>
                 </a>
             </div>
         </nav>
@@ -82,6 +99,37 @@
         </div>
     </section>
 
-    <script src="script.js"></script>
+    <div id="notificationContainer"></div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>О нас</h3>
+                <p>GameStore - ваш надежный партнер в мире игр</p>
+            </div>
+            <div class="footer-section">
+                <h3>Контакты</h3>
+                <p>Email: support@gamestore.com</p>
+                <p>Телефон: +7 (999) 123-45-67</p>
+            </div>
+            <div class="footer-section">
+                <h3>Социальные сети</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-discord"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 GameStore. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script src="utils.js"></script>
+    <script src="theme.js"></script>
+    <script src="notification.js"></script>
+    <script src="auth.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>

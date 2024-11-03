@@ -1,27 +1,30 @@
 /* Переменные */
 :root {
-    --primary: #007bff;
-    --primary-dark: #0056b3;
-    --secondary: #6c757d;
-    --success: #28a745;
-    --danger: #dc3545;
-    --warning: #ffc107;
-    --info: #17a2b8;
-    --background: #0a0a0a;
-    --card-bg: #111111;
+    --primary: #7289da;
+    --primary-dark: #5b73c7;
+    --secondary: #99aab5;
+    --success: #43b581;
+    --danger: #f04747;
+    --warning: #faa61a;
+    --info: #00b0f4;
+    --background: #1a1a1a;
+    --card-bg: #2c2f33;
+    --card-bg-hover: #34383c;
     --text: #ffffff;
-    --text-secondary: #a0a0a0;
+    --text-secondary: #b9bbbe;
     --border-radius: 10px;
     --transition: all 0.3s ease;
-    --box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    --box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    --input-bg: #40444b;
+    --header-height: 70px;
 }
 
-/* Общие стили */
+/* Сброс стилей и общие стили */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
@@ -29,6 +32,7 @@ body {
     color: var(--text);
     line-height: 1.6;
     min-height: 100vh;
+    overflow-x: hidden;
 }
 
 /* Анимации */
@@ -42,6 +46,12 @@ body {
     to { transform: translateX(0); }
 }
 
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
 /* Градиентный фон */
 .gradient-bg {
     position: fixed;
@@ -49,22 +59,32 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(45deg, #12c2e9, #c471ed, #f64f59);
-    opacity: 0.1;
+    background: linear-gradient(
+        45deg,
+        rgba(114,137,218,0.1),
+        rgba(67,181,129,0.1),
+        rgba(250,166,26,0.1)
+    );
     z-index: -1;
 }
 
 /* Шапка */
 .header {
-    background-color: rgba(0, 0, 0, 0.8);
-    padding: 1rem 2rem;
+    background-color: rgba(44, 47, 51, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 0 2rem;
     position: fixed;
     width: 100%;
     top: 0;
     z-index: 1000;
+    height: var(--header-height);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
 .nav {
+    max-width: 1400px;
+    margin: 0 auto;
+    height: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -73,81 +93,44 @@ body {
 .logo {
     display: flex;
     align-items: center;
+    gap: 10px;
     font-size: 1.5rem;
-    font-weight: bold;
-    color: var(--primary);
+    font-weight: 800;
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: 1px;
 }
 
 .logo img {
     width: 40px;
-    margin-right: 10px;
+    height: 40px;
 }
 
 .nav-links {
     display: flex;
-    gap: 1.5rem;
+    align-items: center;
+    gap: 2rem;
 }
 
 .nav-link {
     color: var(--text);
     text-decoration: none;
+    font-weight: 500;
     transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: var(--border-radius);
 }
 
 .nav-link:hover {
+    background-color: rgba(255,255,255,0.1);
     color: var(--primary);
 }
 
-/* Профиль */
-.profile-section {
-    position: relative;
-}
-
-.profile-link {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    text-decoration: none;
-    color: var(--text);
-}
-
-.profile-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    overflow: hidden;
-    position: relative;
-}
-
-.profile-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.status-dot {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 10px;
-    height: 10px;
-    background-color: var(--success);
-    border-radius: 50%;
-    border: 2px solid var(--background);
-}
-
-.profile-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.username {
-    font-weight: bold;
-}
-
-.subscription {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
+.nav-link i {
+    font-size: 1.2rem;
 }
 
 /* Кнопки */
@@ -161,7 +144,9 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
+    gap: 8px;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
 }
 
 .btn-primary {
@@ -174,137 +159,301 @@ body {
     transform: translateY(-2px);
 }
 
-.btn-outline {
-    background: transparent;
-    border: 2px solid var(--primary);
-    color: var(--primary);
-}
-
-.btn-outline:hover {
-    background: var(--primary);
+.btn-secondary {
+    background: var(--secondary);
     color: white;
 }
 
-.login-btn {
-    background-color: var(--primary);
+.btn-secondary:hover {
+    background: var(--card-bg-hover);
+    transform: translateY(-2px);
+}
+
+.btn-danger {
+    background: var(--danger);
     color: white;
-    padding: 0.5rem 1rem;
-    border-radius: var(--border-radius);
+}
+
+.btn-danger:hover {
+    background: #d04141;
+    transform: translateY(-2px);
+}
+
+.btn-success {
+    background: var(--success);
+    color: white;
+}
+
+.btn-success:hover {
+    background: #3ca374;
+    transform: translateY(-2px);
+}
+
+/* Профиль в шапке */
+.profile-section {
+    position: relative;
+}
+
+.profile-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     text-decoration: none;
+    color: var(--text);
+    padding: 8px 16px;
+    border-radius: var(--border-radius);
     transition: var(--transition);
 }
 
-.login-btn:hover {
-    background-color: var(--primary-dark);
+.profile-link:hover {
+    background-color: rgba(255,255,255,0.1);
 }
 
-/* Герой секция */
-.hero {
-    height: 100vh;
+.profile-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    border: 2px solid var(--primary);
+}
+
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.status-dot {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 10px;
+    height: 10px;
+    background-color: var(--success);
+    border-radius: 50%;
+    border: 2px solid var(--card-bg);
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.username {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.subscription {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+/* Формы авторизации и регистрации */
+.auth-page {
+    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    text-align: center;
     padding: 2rem;
+    position: relative;
+    background: linear-gradient(135deg, rgba(114,137,218,0.1) 0%, rgba(67,181,129,0.1) 100%);
 }
 
-.hero-content {
-    max-width: 800px;
-    animation: fadeIn 1s ease;
+.auth-container {
+    width: 100%;
+    max-width: 420px;
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: var(--box-shadow);
+    animation: fadeIn 0.5s ease-out;
+    border: 1px solid rgba(255,255,255,0.1);
 }
 
-.hero-title h1 {
-    font-size: 4rem;
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.auth-form h2 {
+    text-align: center;
+    font-size: 2rem;
     margin-bottom: 1rem;
+    color: var(--text);
+    font-weight: 700;
 }
 
-.hero-title span {
-    color: var(--primary);
-}
-
-.subtitle {
-    font-size: 1.5rem;
+.auth-form .subtitle {
+    text-align: center;
     color: var(--text-secondary);
     margin-bottom: 2rem;
 }
 
-.hero-features {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    margin-bottom: 2rem;
+.form-group {
+    position: relative;
 }
 
-.feature {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.feature i {
-    font-size: 2rem;
-    color: var(--primary);
+.form-group label {
+    display: block;
     margin-bottom: 0.5rem;
+    color: var(--text);
+    font-weight: 500;
 }
 
-.cta-btn {
-    background-color: var(--primary);
-    color: white;
-    padding: 1rem 2rem;
+.form-group input {
+    width: 100%;
+    padding: 1rem;
+    background: var(--input-bg);
+    border: 2px solid transparent;
     border-radius: var(--border-radius);
-    text-decoration: none;
-    font-size: 1.2rem;
+    color: var(--text);
+    font-size: 1rem;
     transition: var(--transition);
-    display: inline-flex;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: rgba(114,137,218,0.1);
+}
+
+.form-group .input-icon {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+}
+
+.auth-form button[type="submit"] {
+    width: 100%;
+    padding: 1rem;
+    margin-top: 1rem;
+    font-size: 1.1rem;
+}
+
+.auth-links {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.auth-links a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.auth-links a:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+}
+
+.auth-divider {
+    display: flex;
     align-items: center;
+    margin: 1.5rem 0;
+    color: var(--text-secondary);
+}
+
+.auth-divider::before,
+.auth-divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,0.1);
+}
+
+.auth-divider span {
+    padding: 0 1rem;
+}
+
+/* Социальные кнопки */
+.social-auth {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.social-btn {
+    flex: 1;
+    padding: 0.8rem;
+    border-radius: var(--border-radius);
+    background: var(--card-bg-hover);
+    color: var(--text);
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     gap: 0.5rem;
 }
 
-.cta-btn:hover {
-    background-color: var(--primary-dark);
+.social-btn:hover {
     transform: translateY(-2px);
+    background: rgba(255,255,255,0.1);
 }
 
-/* Страница профиля */
+/* Профиль */
 .profile-page {
-    padding: 80px 20px 20px;
+    padding: calc(var(--header-height) + 2rem) 2rem 2rem;
     max-width: 1200px;
     margin: 0 auto;
-    animation: fadeIn 0.5s ease;
-}
-
-.profile-container {
-    background: var(--card-bg);
-    border-radius: var(--border-radius);
-    padding: 2rem;
-    box-shadow: var(--box-shadow);
 }
 
 .profile-header {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 2rem;
     display: flex;
-    align-items: center;
     gap: 2rem;
-    padding-bottom: 2rem;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    align-items: center;
+    box-shadow: var(--box-shadow);
 }
 
-.profile-page-avatar {
+.profile-avatar-large {
     width: 150px;
     height: 150px;
     border-radius: 50%;
-    object-fit: cover;
     border: 4px solid var(--primary);
+    overflow: hidden;
+    position: relative;
 }
 
-.profile-details {
+.profile-avatar-large img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-info-large {
+    flex: 1;
+}
+
+.profile-username {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.profile-email {
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+.profile-stats {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200 px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 1rem;
-    margin: 2rem 0;
+    margin-top: 1rem;
 }
 
 .stat-card {
-    background: rgba(255,255,255,0.05);
+    background: var(--card-bg-hover);
     padding: 1.5rem;
     border-radius: var(--border-radius);
     text-align: center;
@@ -313,125 +462,24 @@ body {
 
 .stat-card:hover {
     transform: translateY(-5px);
-    background: rgba(255,255,255,0.1);
-}
-
-.stat-icon {
-    font-size: 2rem;
-    color: var(--primary);
-    margin-bottom: 0.5rem;
 }
 
 .stat-value {
-    font-size: 1.5rem;
-    font-weight: bold;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--primary);
 }
 
 .stat-label {
-    font-size: 1rem;
     color: var(--text-secondary);
+    font-weight: 500;
 }
 
-/* Игры */
-.games-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin-top: 2rem;
-}
-
-.game-card {
-    background: var(--card-bg);
-    border-radius: var(--border-radius);
-    overflow: hidden;
-    transition: var(--transition);
-}
-
-.game-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--box-shadow);
-}
-
-.game-image {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-}
-
-.game-info {
-    padding: 1rem;
-}
-
-.game-title {
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-}
-
-.game-description {
-    font-size: 1rem;
-    color: var(--text-secondary);
-}
-
-/* Формы */
-.auth-container {
+.profile-actions {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 2rem;
-}
-
-.auth-form {
-    background: var(--card-bg);
-    padding: 2rem;
-    border-radius: var(--border-radius);
-    width: 100%;
-    max-width: 400px;
-    box-shadow: var(--box-shadow);
-    animation: fadeIn 0.5s ease;
-}
-
-.form-group {
-    margin-bottom: 1.5rem;
-}
-
-.input-group {
-    position: relative;
-    margin-bottom: 1.5rem;
-}
-
-.input-group input {
-    width: 100%;
-    padding: 1rem;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: var(--border-radius);
-    color: var(--text);
-    transition: var(--transition);
-}
-
-.input-group input:focus {
-    border-color: var(--primary);
-    outline: none;
-}
-
-.input-group label {
-    position: absolute;
-    left: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-secondary);
-    transition: var(--transition);
-    pointer-events: none;
-}
-
-.input-group input:focus + label,
-.input-group input:not(:placeholder-shown) + label {
-    top: 0;
-    font-size: 0.8rem;
-    background: var(--card-bg);
-    padding: 0 0.5rem;
+    gap: 1rem;
+    margin-top: 2rem;
 }
 
 /* Уведомления */
@@ -443,11 +491,25 @@ body {
     border-radius: var(--border-radius);
     background: var(--success);
     color: white;
+    box-shadow: var(--box-shadow);
     animation: slideIn 0.3s ease;
+    z-index: 1000;
+}
+
+.notification.error {
+    background: var(--danger);
 }
 
 /* Адаптивный дизайн */
 @media (max-width: 768px) {
+    .nav-links {
+        display: none;
+    }
+
+    .mobile-menu-btn {
+        display: block;
+    }
+
     .profile-header {
         flex-direction: column;
         text-align: center;
@@ -457,146 +519,324 @@ body {
         grid-template-columns: 1fr;
     }
 
-    .games-grid {
-        grid-template-columns: 1fr;
+    .auth-container {
+        padding: 1.5rem;
     }
 }
 
-/* Общие стили для страниц аутентификации и поддержки */
-.auth-page, .support-page {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* Мобильное меню */
+.mobile-menu {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    width: 100%;
+    height: calc(100vh - var(--header-height));
+    background: var(--card-bg);
     padding: 2rem;
-    position: relative;
-    overflow: hidden;
+    transform: translateX(-100%);
+    transition: var(--transition);
 }
 
-.auth-container, .support-container {
-    background: rgba(17, 25, 40, 0.75);
-    border-radius: 16px;
-    padding: 3rem;
-    width: 100%;
-    max-width: 400px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    z-index: 1;
+.mobile-menu.active {
+    transform: translateX(0);
 }
 
-.auth-form h2, .support-form h2 {
-    color: #fff;
-    text-align: center;
+.mobile-menu .nav-link {
+    padding: 1rem;
+    border-bottom: 1px solid rgba (255,255,255,0.1);
+}
+
+.mobile-menu .nav-link:hover {
+    background: rgba(255,255,255,0.1);
+}
+/* Страница с играми */
+.games-page {
+    padding: calc(var(--header-height) + 2rem) 2rem 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
     margin-bottom: 2rem;
-    font-size: 2rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+    text-align: center;
 }
 
-.form-group {
-    margin-bottom: 1.5rem;
+.games-filter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    gap: 1rem;
 }
 
-.form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: #fff;
-    font-weight: 600;
-}
-
-.form-group input,
-.form-group textarea {
-    width: 100%;
-    padding: 0.75rem;
+.games-filter select,
+.games-filter input {
+    padding: 0.8rem 1rem;
+    border-radius: var(--border-radius);
+    background: var(--input-bg);
     border: none;
-    border-radius: 5px;
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
+    color: var(--text);
     font-size: 1rem;
-    transition: all 0.3s ease;
 }
 
-.form-group input:focus,
-.form-group textarea:focus {
+.games-filter select:focus,
+.games-filter input:focus {
     outline: none;
-    background: rgba(255, 255, 255, 0.2);
     box-shadow: 0 0 0 2px var(--primary);
 }
 
-.auth-form button,
-.support-form button {
+.games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.game-card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    transition: var(--transition);
+    box-shadow: var(--box-shadow);
+}
+
+.game-card:hover {
+    transform: translateY(-5px);
+}
+
+.game-image {
     width: 100%;
-    padding: 0.75rem;
-    border: none;
-    border-radius: 5px;
-    background: var(--primary);
-    color: #fff;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    height: 200px;
+    object-fit: cover;
+}
+
+.game-info {
+    padding: 1.5rem;
+}
+
+.game-title {
+    font-size: 1.2rem;
     font-weight: 600;
+    margin-bottom: 0.5rem;
 }
 
-.auth-form button:hover,
-.support-form button:hover {
-    background: var(--primary-dark);
-    transform: translateY(-2px);
+.game-description {
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
 }
 
-.auth-links {
-    margin-top: 1rem;
+.game-price {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+/* Страница с ценами */
+.pricing-page {
+    padding: calc(var(--header-height) + 2rem) 2rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.pricing-card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    text-align: center;
+    transition: var(--transition);
+    box-shadow: var(--box-shadow);
+}
+
+.pricing-card:hover {
+    transform: translateY(-5px);
+}
+
+.pricing-card.featured {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+}
+
+.pricing-card h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.pricing-card .price {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+.pricing-card .features {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 2rem;
+}
+
+.pricing-card .features li {
+    margin-bottom: 0.8rem;
+}
+
+/* Страница поддержки */
+.support-page {
+    padding: calc(var(--header-height) + 2rem) 2rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.support-content {
+    display: flex;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.faq-section {
+    flex: 1;
+}
+
+.faq-item {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.faq-item h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+}
+
+.faq-item p {
+    color: var(--text-secondary);
+    display: none;
+}
+
+.faq-item.active p {
+    display: block;
+}
+
+.contact-form {
+    flex: 1;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+}
+
+.contact-form h2 {
+    margin-bottom: 1.5rem;
     text-align: center;
 }
 
-.auth-links a {
-    color: var(--primary);
-    text-decoration: none;
-    transition: all 0.3s ease;
+/* Улучшения для форм авторизации и регистрации */
+.auth-form .form-group {
+    position: relative;
 }
 
-.auth-links a:hover {
-    color: var(--primary-dark);
-    text-decoration: underline;
+.auth-form .form-group input {
+    padding-left: 3rem;
 }
 
-/* Уникальные стили для каждой страницы */
-.register-page::before {
-    content: "";
+.auth-form .form-group i {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
-    z-index: -1;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
 }
 
-.login-page::before {
-    content: "";
+.password-toggle {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);
-    z-index: -1;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: var(--text-secondary);
 }
 
-.support-page::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
-    z-index: -1;
+.auth-form .error-message {
+    color: var(--danger);
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
 }
 
-/* Анимация для форм */
+/* Улучшения для профиля */
+.profile-tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+    gap: 1rem;
+}
+
+.profile-tab {
+    padding: 0.8rem 1.5rem;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.profile-tab.active {
+    background: var(--primary);
+    color: white;
+}
+
+.profile-content {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+}
+
+.game-library {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.game-library-item {
+    background: var(--card-bg-hover);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    text-align: center;
+}
+
+.game-library-item img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: var(--border-radius);
+    margin-bottom: 0.5rem;
+}
+
+.friends-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.friend-item {
+    background: var(--card-bg-hover);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    text-align: center;
+}
+
+.friend-item img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 0.5rem;
+}
+
+/* Анимации */
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -608,7 +848,11 @@ body {
     }
 }
 
-.auth-container,
-.support-container {
-    animation: fadeInUp 0.5s ease-out;
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
 }

@@ -11,29 +11,30 @@
     <div class="gradient-bg"></div>
     
     <header class="header">
-        <!-- Навигация -->
+        <!-- Навигация (такая же, как на главной странице) -->
     </header>
 
     <main class="games-page">
-        <div class="games-grid">
-            <div class="game-card">
-                <img src="game1.jpg" alt="Game 1" class="game-image">
-                <div class="game-info">
-                    <h2>Game 1</h2>
-                    <p>Описание игры</p>
-                </div>
-            </div>
-            <div class="game-card">
-                <img src="game2.jpg" alt="Game 2" class="game-image">
-                <div class="game-info">
-                    <h2>Game 2</h2>
-                    <p>Описание игры</p>
-                </div>
-            </div>
-            <!-- Добавьте больше игр -->
+        <h1 class="page-title">Наши игры</h1>
+        <div class="games-filter">
+            <select id="genreFilter">
+                <option value="">Все жанры</option>
+                <option value="action">Экшн</option>
+                <option value="rpg">RPG</option>
+                <option value="strategy">Стратегия</option>
+            </select>
+            <input type="text" id="searchGame" placeholder="Поиск игры...">
+        </div>
+        <div class="games-grid" id="gamesGrid">
+            <!-- Игры будут добавлены динамически с помощью JavaScript -->
         </div>
     </main>
 
-    <script src="script.js"></script>
+    <footer class="footer">
+        <!-- Футер (такой же, как на главной странице) -->
+    </footer>
+
+    <script src="app.js" type="module"></script>
+    <script src="games.js" type="module"></script>
 </body>
 </html>

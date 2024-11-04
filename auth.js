@@ -1,175 +1,235 @@
 // auth.js
 
 class Auth {
+    // Константы для ключей хранилища
+    static STORAGE_KEYS = {
+        TOKEN: 'authToken',
+        USER: 'currentUser',
+        USERS: 'users'
+    };
+
     constructor() {
-        this.tokenKey = 'authToken';
-        this.userKey = 'currentUser';
-        this.usersKey = 'users';
-        this.loginBtn = document.getElementById('loginBtn');
-        this.profileSection = document.getElementById('profileSection');
-        this.profileUsername = document.getElementById('profileUsername');
-        this.profileSubscription = document.getElementById('profileSubscription');
-        this.profileAvatar = document.getElementById('profileAvatar');
+        // DOM элементы
+        this.elements = {
+            loginBtn: document.getElementById('loginBtn'),
+            profileSection: document.getElementById('profileSection'),
+            profileUsername: document.getElementById('profileUsername'),
+            profileSubscription: document.getElementById('profileSubscription'),
+            profileAvatar: document.getElementById('profileAvatar')
+        };
 
         this.init();
     }
 
-    init() {
-        this.loginBtn.addEventListener('click', () => this.redirectToLogin());
-        this.checkAuth();
-        this.initializeUsers();
+    async init() {
+        try {
+            this.elements.loginBtn?.addEventListener('click', () => this.redirectToLogin());
+            await this.checkAuth();
+            this.initializeUsers();
+        } catch (error) {
+            console.error('Ошибка инициализации:', error);
+            this.showNotification('Ошибка инициализации системы', 'error');
+        }
     }
 
     initializeUsers() {
-        if (!localStorage.getItem(this.usersKey)) {
+        if (!localStorage.getItem(Auth.STORAGE_KEYS.USERS)) {
             const initialUsers = [
                 {
                     id: 1,
                     username: 'user1',
                     email: 'user1@example.com',
-                    password: 'password1',
+                    password: this.hashPassword('password1'), // Хеширование пароля
                     avatar: 'avatar1.png',
-                    subscription: 'Premium'
+                    subscription: 'Premium',
+                    createdAt: new Date().toISOString()
                 },
-                {
-                    id: 2,
-                    username: 'user2',
-                    email: 'user2@example.com',
-                    password: 'password2',
-                    avatar: 'avatar2.png',
-                    subscription: 'Standard'
-                }
+                // Другие пользователи...
             ];
-            localStorage.setItem(this.usersKey, JSON.stringify(initialUsers));
+            this.saveUsers(initialUsers);
         }
     }
 
-    checkAuth() {
+    async checkAuth() {
         const token = this.getToken();
         if (token) {
-            const user = this.getUserByToken(token);
+            const user = await this.validateToken(token);
             if (user) {
                 this.updateUIForAuthenticatedUser(user);
             } else {
-                this.logout();
+                await this.logout();
             }
         } else {
             this.updateUIForUnauthenticatedUser();
         }
     }
 
-    getUserByToken(token) {
-        const users = JSON.parse(localStorage.getItem(this.usersKey));
-        return users.find(user => user.id === parseInt(token));
+    async validateToken(token) {
+        try {
+            // Здесь должна быть реальная проверка токена на сервере
+            const user = this.getUserByToken(token);
+            return user && this.isTokenValid(token) ? user : null;
+        } catch (error) {
+            console.error('Ошибка валидации токена:', error);
+            return null;
+        }
     }
 
-    login(email, password) {
-        const users = JSON.parse(localStorage.getItem(this.usersKey));
-        const user = users.find(u => u.email === email && u.password === password);
-        
-        if (user) {
-            this.setToken(user.id.toString());
-            this.setUser(user);
-            this.updateUIForAuthenticatedUser(user);
-            this.showNotification('Вы успешно вошли в систему!', 'success');
+    async login(email, password) {
+        try {
+            const hashedPassword = this.hashPassword(password);
+            const users = this.getUsers();
+            const user = users.find(u => 
+                u.email === email && 
+                u.password === hashedPassword
+            );
+            
+            if (user) {
+                const token = this.generateToken();
+                this.setToken(token);
+                this.setUser(user);
+                this.updateUIForAuthenticatedUser(user);
+                this.showNotification('Успешный вход в систему', 'success');
+                return true;
+            }
+            
+            this.showNotification('Неверные учетные данные', 'error');
+            return false;
+        } catch (error) {
+            console.error('Ошибка входа:', error);
+            this.showNotification('Ошибка при входе в систему', 'error');
+            return false;
+        }
+    }
+
+    async register(username, email, password) {
+        try {
+            const users = this.getUsers();
+            if (users.some(u => u.email === email)) {
+                this.showNotification('Email уже используется', 'error');
+                return false;
+            }
+
+            const newUser = {
+                id: this.generateUserId(),
+                username,
+                email,
+                password: this.hashPassword(password),
+                avatar: 'default-avatar.png',
+                subscription: 'Standard',
+                createdAt: new Date().toISOString()
+            };
+
+            users.push(newUser);
+            this.saveUsers(users);
+
+            const token = this.generateToken();
+            this.setToken(token);
+            this.setUser(newUser);
+            
+            this.updateUIForAuthenticatedUser(newUser);
+            this.showNotification('Регистрация успешна', 'success');
             return true;
-        } else {
-            this.showNotification('Неверный email или пароль', 'error');
+        } catch (error) {
+            console.error('Ошибка регистрации:', error);
+            this.showNotification('Ошибка при регистрации', 'error');
             return false;
         }
     }
 
-    register(username, email, password) {
-        const users = JSON.parse(localStorage.getItem(this.usersKey));
-        if (users.some(u => u.email === email)) {
-            this.showNotification('Пользователь с таким email уже существует', 'error');
-            return false;
+    async logout() {
+        try {
+            this.removeToken();
+            this.removeUser();
+            this.updateUIForUnauthenticatedUser();
+            this.showNotification('Выход выполнен успешно', 'success');
+        } catch (error) {
+            console.error('Ошибка выхода:', error);
+            this.showNotification('Ошибка при выходе из системы', 'error');
         }
-
-        const newUser = {
-            id: users.length + 1,
-            username,
-            email,
-            password,
-            avatar: 'default-avatar.png',
-            subscription: 'Standard'
-        };
-
-        users.push(newUser);
-        localStorage.setItem(this.usersKey, JSON.stringify(users));
-
-        this.setToken(newUser.id.toString());
-        this.setUser(newUser);
-        this.updateUIForAuthenticatedUser(newUser);
-        this.showNotification('Вы успешно зарегистрировались!', 'success');
-        return true;
     }
 
-    logout() {
-        this.removeToken();
-        this.removeUser();
-        this.updateUIForUnauthenticatedUser();
-        this.showNotification('Вы вышли из системы', 'success');
-    }
-
+    // UI методы
     updateUIForAuthenticatedUser(user) {
-        this.loginBtn.style.display = 'none';
-        this.profileSection.style.display = 'flex';
-        this.profileUsername.textContent = user.username;
-        this.profileSubscription.textContent = user.subscription;
-        this.profileAvatar.src = user.avatar;
+        if (!user) return;
+
+        const { loginBtn, profileSection, profileUsername, 
+                profileSubscription, profileAvatar } = this.elements;
+
+        loginBtn.style.display = 'none';
+        profileSection.style.display = 'flex';
+        profileUsername.textContent = user.username;
+        profileSubscription.textContent = user.subscription;
+        profileAvatar.src = user.avatar;
     }
 
     updateUIForUnauthenticatedUser() {
-        this.loginBtn.style.display = 'flex';
-        this.profileSection.style.display = 'none';
+        const { loginBtn, profileSection } = this.elements;
+        loginBtn.style.display = 'flex';
+        profileSection.style.display = 'none';
     }
 
-    redirectToLogin() {
-        window.location.href = 'login.html';
+    // Вспомогательные методы
+    generateToken() {
+        return Math.random().toString(36).substr(2) + Date.now().toString(36);
+    }
+
+    generateUserId() {
+        return Date.now() + Math.random().toString(36).substr(2);
+    }
+
+    hashPassword(password) {
+        // В реальном приложении использовать криптографические функции
+        return btoa(password); // Простое кодирование для демонстрации
+    }
+
+    isTokenValid(token) {
+        // Здесь должна быть реальная проверка валидности токена
+        return true;
+    }
+
+    // Методы работы с хранилищем
+    getToken() {
+        return localStorage.getItem(Auth.STORAGE_KEYS.TOKEN);
     }
 
     setToken(token) {
-        localStorage.setItem(this.tokenKey, token);
-    }
-
-    getToken() {
-        return localStorage.getItem(this.tokenKey);
+        localStorage.setItem(Auth.STORAGE_KEYS.TOKEN, token);
     }
 
     removeToken() {
-        localStorage.removeItem(this.tokenKey);
-    }
-
-    setUser(user) {
-        localStorage.setItem(this.userKey, JSON.stringify(user));
+        localStorage.removeItem(Auth.STORAGE_KEYS.TOKEN);
     }
 
     getUser() {
-        const userJson = localStorage.getItem(this.userKey);
+        const userJson = localStorage.getItem(Auth.STORAGE_KEYS.USER);
         return userJson ? JSON.parse(userJson) : null;
     }
 
-    removeUser() {
-        localStorage.removeItem(this.userKey);
+    setUser(user) {
+        localStorage.setItem(Auth.STORAGE_KEYS.USER, JSON.stringify(user));
     }
 
-    isAuthenticated() {
-        return !!this.getToken();
+    removeUser() {
+        localStorage.removeItem(Auth.STORAGE_KEYS.USER);
+    }
+
+    getUsers() {
+        return JSON.parse(localStorage.getItem(Auth.STORAGE_KEYS.USERS) || '[]');
+    }
+
+    saveUsers(users) {
+        localStorage.setItem(Auth.STORAGE_KEYS.USERS, JSON.stringify(users));
     }
 
     showNotification(message, type) {
-        // Предполагается, что у вас есть функция showNotification из предыдущего кода
-        if (typeof showNotification === 'function') {
-            showNotification(message, type);
+        if (typeof window.showNotification === 'function') {
+            window.showNotification(message, type);
         } else {
             console.log(`${type.toUpperCase()}: ${message}`);
         }
     }
 }
 
-// Инициализация аутентификации
-const auth = new Auth();
-
-// Экспорт для использования в других модулях
-export default auth;
+// Экспорт экземпляра класса
+export default new Auth();
